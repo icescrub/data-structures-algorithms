@@ -1,0 +1,212 @@
+NOTE 1: Take better notes. Add this to Anki files. Break it down by category ("hashing", "trees", etc).
+
+PRIORITY QUEUE:
+	1. DP (knapsack...) +
+           greedy (kruskal's MST...) +
+           backtracking (N queens...) +
+           branch and bound (0/1 Knapsack/N queens/...) +
+           Divide and Conquer (Merge Sort/x^n/...)
+	2. graphs: ford-fulkerson // consider rewriting in matrix form too. // consider cycle detection, strongly connected components algs...
+	3. trees: RB tree, tries // look into B trees/fenwick trees?
+	4. sorting: counting + radix sort
+	5. quickselect
+	6. numerical/bitwise/crypto
+	7. cleanup: miscellany on hashing/heaps/strings/...
+
+
+abstract data types (ADTS) and the concrete data types (CDTs) used to implement them:
+	note that sets and dicts are used intermediately.
+	heaps (array, LL)
+	queues (array, LL)
+	deques (array, LL)
+	stacks (array, LL)
+	trees (array, tree)
+	hash/dicts (array?)
+	sets (hash?)
+
+===========
+
+HASHING
+
+hashmap = dict in java?
+hashmap vs hashset?
+hashes/maps implemented as trees?
+
+Something I like to point out: Tries, not search trees, are the purely functional counterpart to hash tables. The insert, query, and delete operations take time linear in the size of the key, like hash tables, whereas with search trees it's logarithmic in the number of elements. Unlike search trees that have to be rebalanced, purely functional tries share structure just about as perfectly as possible. Unlike hash tables, there is no amortization, and they sort their keys. They are quite cool. The only real downside is locality...
+
+LRU cache = doubly LL + hash table (or dict, for python)
+
+hashes:
+	perfect hash = injective hash function, no collisions
+	cuckoo hashing
+	SHA-1
+	checksum (luhn alg)
+	rabin fingerprint
+	MD5/6
+	separate chaining = LL for collision resolution
+	RK = rolling hash
+
+dicts can be implemented as hashes or trees, but Python implements them as HTs:
+	"CPython’s dictionaries are implemented as resizable hash tables. Compared to B-trees, this gives better performance for lookup (the most common operation by far) under most circumstances, and the implementation is simpler."
+
+==============
+
+LINKED LISTS
+
+tree: LL w 2+ pointers instead of 1. 2+ children instead of 1. pointers CAN go from child to parent, like LL.
+
+LL: set of nodes and pointer to head
+node: int, pointer to node
+
+LL: much less structure than binomial heap, so it's faster. BUT, popmin is slower since it has less info to go off of.
+
+===========
+
+HEAPS
+
+heap: tree rep, but why? just do list for speed
+
+HEAPS V TREES
+	HEAPS: best for min/max O(1), insert O(1), priority queues
+	TREES: best for search/insertion O(logn)
+
+bin heap vs binomial heap
+
+heap: array, all about flipping parent w child.
+
+popmin: bin heap = O(logn), LL = O(n)
+decrease key: bin heap = O(logn), LL = O(1).
+Push is O(1) for both.
+
+=======
+
+STACKS/QUEUES
+
+stacks = arrays. they should not be LLs
+
+queue:
+	if deque: use LL to manually append values to front. OR, use priority queue, but priority is based on count variable - dead simple.
+	if priority queue: use heap. you have to handroll priority, with tiebreak variable just in case.
+
+graphs as LLs: how are edges of LLs handled? are edges their own object?
+
+space complexity as well. this makes for big data centers...$$$
+
+SKIP LISTS: "It's a struct with similar search performance to a binary search tree but you don't have to worry as much about concurrency. When you add a node to a tree you may have to rebalance the whole thing. When you add a mode to a skip list you only touch the neighbor nodes."
+
+============
+
+SORTING
+
+cocktail shaker sort = bubble sort but a little bit better bc max/min vals are pushed to left/right
+
+tree sort: in-order traversal prints out binary tree in correct order.
+
+quicksort has stable and unstable versions
+
+cache locality: quicksort > merge/heap since they're all over the plce. cache locality essential for real-world speed
+
+===========
+
+TREES
+
+DONT FORGET ABOUT list of lists representation in Python
+
+Do RB trees at some point
+B trees too
+B+ trees too (B tree with locking protocol for efficient concurrent updates)
+
+"trie" = prefix tree
+
+RB trees: Linux's process scheduler is the Completely Fair Scheduler
+
+I'm sure DBs use these extensively
+
+==========
+
+GRAPHS
+
+DONT FORGET ABOUT adj matrix representation in Python
+
+like trees, but with edge weights? not sure how they're different, exactly. analyze this...
+
+adj list representations. These are basically the same:
+	1. 2d dict. U --> (V --> weight), OR look at it as (U --> V) --> weight. This might seem more natural.
+	2. map node to tuple. U --> (V, weight).
+
+Ford-Fulkerson: network flows --> max-flow/min-cut
+
+I'm sure DBs use these extensively
+
+=========
+
+STRINGS
+
+diff algorithm
+
+sublinear algs possible via preprocessing.
+	especially relevant for string matching, fuzzy or otherwise
+	prob true for audio-visual stuff.
+
+string algs: python is good for string stuff.
+maybe not as good for AV stuff? nor concurrency/OS, important for bigN
+
+regular expr are expressed as DFA/NFAs. relate regex complexity to that
+	backtracking etc can produce infinite time complexity. if none of these advanced things are done...O(n)?
+
+fuzzy string match = PARTIAL string match
+
+range "search": not just letters! "alphabet" --> strings/pattern matching
+	regexes are just another alphabet
+
+RK: not as good as others for single pattern search but better for MULTI pattern search
+
+========
+
+DYNAMIC PROGRAMMING
+
+DP: On the other hand, what I learned about dynamic programming in university is somewhat different than this approach. The core concept is dividing a problem into smaller problems with overlapping optimal solutions. A prime example for this would be Dijkstra's algorithm, where instead of computing the shortest path to every node in isolation from the others, you first compute an optimal solution for the next node given your current knowledge. Another great example, in my opinion, is the iterative algorithm for computing the Levenshtein distance, a measure for the similarity of strings. These two algorithms share that there usually are suboptimal solutions that can be eliminated by iteratively computing an optimal solution for the next small step from the solution of the last small step, ie the next node or the next letter, while pattern matching against a regex of this form usually only has the form "match" or "no match", without any real overlap of solutions.
+
+DP vs recursion: connection to matroids? is the space convex, or does DP circumvent that?
+	is DP greedy or not? my guess is no
+DP: LCS --> strings/pattern matching
+
+TSP goes under DP i guess
+
+=========
+
+CRYPTO/NUMERICAL/BITWISE
+
+Any relevance outside of crypto?
+
+Russian peasant multiplication algorithm, Karatsuba method and Winograd-Strassen matrix multiplication
+
+==========
+
+NP-COMPLETES
+
+TSP: christofides + genetic algos
+BOOLSAT
+
+==========
+
+RANGE/SUM QUERIES
+
+segment tree and BIT ("fenwick tree")
+
+===========
+
+ADVANCED
+
+GEOMETRIC:
+	computer vision: occlusion detection
+	graphics
+	stats (n-dim spaces) + linear algebra + matrix data structure for Data Science/ML algos
+	quadtree = knn algo?
+
+INFORMATION THEORY:
+	compressions
+	encodings
+
+SPECIALTIES:
+	Google pagerank: probabilistic algos baked into this
